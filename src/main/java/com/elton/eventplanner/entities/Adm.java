@@ -1,11 +1,29 @@
 package com.elton.eventplanner.entities;
 
+import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "tb_adm")
 public class Adm {
 	
-	private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long admId;
 	private String password;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "adm")
+	private List<Event> eventList;
 	
 	public Adm() {
 		
@@ -13,16 +31,16 @@ public class Adm {
 
 	public Adm(Long id, String password) {
 		super();
-		this.id = id;
+		this.admId = id;
 		this.password = password;
 	}
 
 	public Long getId() {
-		return id;
+		return admId;
 	}
 
 	public void setId(Long id) {
-		this.id = id;
+		this.admId = id;
 	}
 
 	public String getPassword() {
@@ -33,9 +51,17 @@ public class Adm {
 		this.password = password;
 	}
 
+	public List<Event> getEventList() {
+		return eventList;
+	}
+	
+	public void addEvent(Event event) {
+		this.eventList.add(event);
+	}
+ 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(admId);
 	}
 
 	@Override
@@ -47,6 +73,6 @@ public class Adm {
 		if (getClass() != obj.getClass())
 			return false;
 		Adm other = (Adm) obj;
-		return Objects.equals(id, other.id);
+		return Objects.equals(admId, other.admId);
 	}
 }
