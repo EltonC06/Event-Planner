@@ -25,14 +25,14 @@ public class Event {
 	private String description;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "adm_id", referencedColumnName = "admId")
-	private Adm adm;
+	@JoinColumn(name = "user_id", referencedColumnName = "userId")
+	private User adm;
 	
 	public Event() {
 		
 	}
 
-	public Event(Long id, String name, Date date, String local, String description, Adm adm) {
+	public Event(Long id, String name, Date date, String local, String description, User adm) {
 		super();
 		this.eventId = id;
 		this.name = name;
@@ -82,11 +82,11 @@ public class Event {
 		this.description = description;
 	}
 
-	public Adm getAdm() {
+	public User getAdm() {
 		return adm;
 	}
 
-	public void setAdm(Adm adm) {
+	public void setAdm(User adm) {
 		this.adm = adm;
 	}
 
