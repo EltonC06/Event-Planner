@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.elton.eventplanner.entities.User;
 
 @Repository
-public interface AdmRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
 }

@@ -26,7 +26,7 @@ public class Event {
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id", referencedColumnName = "userId")
-	private User adm;
+	private User user;
 	
 	public Event() {
 		
@@ -39,7 +39,7 @@ public class Event {
 		this.date = date;
 		this.local = local;
 		this.description = description;
-		this.adm = adm;
+		this.user = adm;
 	}
 
 	public Long getId() {
@@ -83,11 +83,11 @@ public class Event {
 	}
 
 	public User getAdm() {
-		return adm;
+		return user;
 	}
 
 	public void setAdm(User adm) {
-		this.adm = adm;
+		this.user = adm;
 	}
 
 	@Override

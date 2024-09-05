@@ -84,7 +84,7 @@ public class User {
 	public int hashCode() {
 		return Objects.hash(userId);
 	}
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
