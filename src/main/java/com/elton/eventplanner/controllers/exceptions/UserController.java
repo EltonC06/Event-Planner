@@ -13,43 +13,37 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.elton.eventplanner.entities.User;
-import com.elton.eventplanner.repositories.UserRepository;
+import com.elton.eventplanner.services.UserService;
 
 @RestController
 @RequestMapping(value = "/users")
 public class UserController {
 
 	@Autowired
-	UserRepository repository;
+	UserService service;
 	
 	@GetMapping
 	public List<User> findAll() {
-		return repository.findAll();
+		return service.findAllUsers();
 	}
 	
 	@GetMapping(value = "/{id}")
 	public User findById(@PathVariable(name = "id") Long id) {
-		return repository.findById(id).get();
+		return service.findUserById(id);
 	}
 	
 	@PostMapping
 	public void createUser(@RequestBody User user) {
-		repository.save(user);
+		service.saveUser(user);
 	}
 	
 	@PutMapping(value = "/{id}")
 	public void updateUser(@PathVariable(name = "id") Long id, @RequestBody User user) {
-		User userToUpdate = repository.findById(id).get();
-		
-		userToUpdate.setUserName(user.getUserName());
-		userToUpdate.setPassword(user.getPassword());
-		userToUpdate.setRole(user.getRole());
-		
-		repository.save(userToUpdate);
+		service.updateUser(id, user);
 	}
 	
 	@DeleteMapping(value = "/{id}")
 	public void deleteUser(@PathVariable(name = "id") Long id) {
-		repository.deleteById(id);
+		service.deleteUser(id);
 	}
 }
