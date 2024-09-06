@@ -19,10 +19,14 @@ public class Event {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long eventId;
+	
 	private String name;
+	
 	private Date date;
+	
 	private String local;
 	private String description;
+	
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id", referencedColumnName = "userId")
@@ -32,14 +36,14 @@ public class Event {
 		
 	}
 
-	public Event(Long id, String name, Date date, String local, String description, User adm) {
+	public Event(Long id, String name, String local, Date date, String description, User user) {
 		super();
 		this.eventId = id;
 		this.name = name;
 		this.date = date;
 		this.local = local;
 		this.description = description;
-		this.user = adm;
+		this.user = user;
 	}
 
 	public Long getId() {
@@ -82,11 +86,11 @@ public class Event {
 		this.description = description;
 	}
 
-	public User getAdm() {
+	public User getUser() {
 		return user;
 	}
 
-	public void setAdm(User adm) {
+	public void setUser(User adm) {
 		this.user = adm;
 	}
 

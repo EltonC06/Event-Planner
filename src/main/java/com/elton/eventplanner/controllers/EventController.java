@@ -1,4 +1,4 @@
-package com.elton.eventplanner.controllers.exceptions;
+package com.elton.eventplanner.controllers;
 
 import java.util.List;
 
@@ -12,38 +12,38 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.elton.eventplanner.entities.User;
-import com.elton.eventplanner.services.UserService;
+import com.elton.eventplanner.entities.Event;
+import com.elton.eventplanner.services.EventService;
 
 @RestController
-@RequestMapping(value = "/users")
-public class UserController {
+@RequestMapping(value = "/events")
+public class EventController {
 
 	@Autowired
-	UserService service;
+	EventService service;
 	
 	@GetMapping
-	public List<User> findAll() {
-		return service.findAllUsers();
+	public List<Event> findAll() {
+		return service.findAllEvent();
 	}
 	
 	@GetMapping(value = "/{id}")
-	public User findById(@PathVariable(name = "id") Long id) {
-		return service.findUserById(id);
+	public Event findById(@PathVariable(name = "id") Long id) {
+		return service.findEventById(id);
 	}
 	
 	@PostMapping
-	public void createUser(@RequestBody User user) {
-		service.saveUser(user);
+	public void saveEvent(@RequestBody Event event) {
+		service.saveEvent(event);
 	}
 	
 	@PutMapping(value = "/{id}")
-	public void updateUser(@PathVariable(name = "id") Long id, @RequestBody User user) {
-		service.updateUser(id, user);
+	public void updateEvent(@PathVariable Long id, @RequestBody Event event) {
+		service.updateEvent(id, event);
 	}
 	
 	@DeleteMapping(value = "/{id}")
-	public void deleteUser(@PathVariable(name = "id") Long id) {
-		service.deleteUser(id);
+	public void deleteEvent(@PathVariable(name = "id") Long id) {
+		service.deleteEvent(id);
 	}
 }
