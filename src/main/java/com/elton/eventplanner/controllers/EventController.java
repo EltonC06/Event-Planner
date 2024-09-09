@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.elton.eventplanner.DTOs.EventDTO;
 import com.elton.eventplanner.entities.Event;
 import com.elton.eventplanner.services.EventService;
 
@@ -33,8 +34,8 @@ public class EventController {
 	}
 	
 	@PostMapping
-	public void saveEvent(@RequestBody Event event) {
-		service.saveEvent(event);
+	public void saveEvent(@RequestBody EventDTO eventDTO) {
+		service.saveEvent(eventDTO);
 	}
 	
 	@PutMapping(value = "/{id}")

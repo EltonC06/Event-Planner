@@ -19,14 +19,10 @@ public class Event {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long eventId;
-	
 	private String name;
-	
 	private Date date;
-	
 	private String local;
 	private String description;
-	
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id", referencedColumnName = "userId")

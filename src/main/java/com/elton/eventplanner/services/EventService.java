@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.elton.eventplanner.DTOs.EventDTO;
 import com.elton.eventplanner.entities.Event;
 import com.elton.eventplanner.repositories.EventRepository;
 
@@ -14,6 +15,9 @@ public class EventService {
 	@Autowired
 	EventRepository repository;
 	
+	@Autowired
+	UserService userService;
+	
 	public List<Event> findAllEvent() {
 		return repository.findAll();
 	}
@@ -22,10 +26,23 @@ public class EventService {
 		return repository.findById(id).get();
 	}
 	
-	public void saveEvent(Event event) {
+	public void saveEvent(EventDTO eventDTO) {		
+		Event event = convertToEntity(eventDTO);
+
 		repository.save(event);
 	}
 	
+	private Event convertToEntity(EventDTO eventDTO) {
+		Event eventConverted = new Event();
+		eventConverted.setDate(eventDTO.getDate());
+		eventConverted.setDescription(eventDTO.getDescription());
+		eventConverted.setLocal(eventDTO.getLocal());
+		eventConverted.setName(eventDTO.getName());
+		eventConverted.setUser(userService.findUserById(eventDTO.getUserId()));
+		
+		return eventConverted;
+	}
+
 	public void updateEvent(Long id, Event event) {
 		Event eventToUpdate = repository.findById(id).get();
 		

@@ -24,7 +24,6 @@ public class User {
 	private String password;
 	private UserRole role;
 	
-	
 	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	private List<Event> eventList;
