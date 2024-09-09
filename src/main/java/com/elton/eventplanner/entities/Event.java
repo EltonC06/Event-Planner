@@ -86,8 +86,8 @@ public class Event {
 		return user;
 	}
 
-	public void setUser(User adm) {
-		this.user = adm;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	@Override

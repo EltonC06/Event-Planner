@@ -39,8 +39,8 @@ public class EventController {
 	}
 	
 	@PutMapping(value = "/{id}")
-	public void updateEvent(@PathVariable Long id, @RequestBody Event event) {
-		service.updateEvent(id, event);
+	public void updateEvent(@PathVariable(name = "id") Long id, @RequestBody EventDTO eventDTO) {
+		service.updateEvent(id, eventDTO);
 	}
 	
 	@DeleteMapping(value = "/{id}")

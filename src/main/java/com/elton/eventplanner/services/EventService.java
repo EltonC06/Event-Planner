@@ -32,6 +32,24 @@ public class EventService {
 		repository.save(event);
 	}
 	
+	public void updateEvent(Long id, EventDTO eventDTO) {
+		Event eventToUpdate = repository.findById(id).get();
+		
+		Event event = convertToEntity(eventDTO);
+		
+		eventToUpdate.setDate(event.getDate());
+		eventToUpdate.setDescription(event.getDescription());
+		eventToUpdate.setLocal(event.getLocal());
+		eventToUpdate.setName(event.getName());
+		eventToUpdate.setUser(event.getUser());
+		
+		repository.save(eventToUpdate);
+	}
+	
+	public void deleteEvent(Long id) {
+		repository.deleteById(id);
+	}
+	
 	private Event convertToEntity(EventDTO eventDTO) {
 		Event eventConverted = new Event();
 		eventConverted.setDate(eventDTO.getDate());
@@ -41,20 +59,5 @@ public class EventService {
 		eventConverted.setUser(userService.findUserById(eventDTO.getUserId()));
 		
 		return eventConverted;
-	}
-
-	public void updateEvent(Long id, Event event) {
-		Event eventToUpdate = repository.findById(id).get();
-		
-		eventToUpdate.setDate(event.getDate());
-		eventToUpdate.setDescription(event.getDescription());
-		eventToUpdate.setLocal(event.getLocal());
-		eventToUpdate.setName(event.getName());
-		
-		repository.save(eventToUpdate);
-	}
-	
-	public void deleteEvent(Long id) {
-		repository.deleteById(id);
 	}
 }
