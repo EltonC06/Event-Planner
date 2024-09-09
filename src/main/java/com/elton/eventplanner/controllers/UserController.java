@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.elton.eventplanner.DTOs.UserDTO;
 import com.elton.eventplanner.entities.User;
 import com.elton.eventplanner.services.UserService;
 
@@ -33,13 +34,13 @@ public class UserController {
 	}
 	
 	@PostMapping
-	public void createUser(@RequestBody User user) {
-		service.saveUser(user);
+	public void createUser(@RequestBody UserDTO userDTO) {
+		service.saveUser(userDTO);
 	}
 	
 	@PutMapping(value = "/{id}")
-	public void updateUser(@PathVariable(name = "id") Long id, @RequestBody User user) {
-		service.updateUser(id, user);
+	public void updateUser(@PathVariable(name = "id") Long id, @RequestBody UserDTO userDTO) {
+		service.updateUser(id, userDTO);
 	}
 	
 	@DeleteMapping(value = "/{id}")
