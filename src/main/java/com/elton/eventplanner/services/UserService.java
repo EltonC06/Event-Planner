@@ -30,7 +30,6 @@ public class UserService {
 	
 	public void saveUser(UserDTO userDTO) {
 		User user = convertToEntity(userDTO);
-		
 		List<User> listOfUser = repository.findAll();
 		for (User obj : listOfUser) {
 			if (obj.getUserName().equals(user.getUserName())) {
@@ -43,7 +42,6 @@ public class UserService {
 	public void updateUser(Long id, UserDTO userDTO) {
 		User user = convertToEntity(userDTO);
 		User userToUpdate = repository.findById(id).get();
-		
 		if (!user.getUserName().equals(userToUpdate.getUserName())) {
 			List<User> listOfUsers = repository.findAll();
 			

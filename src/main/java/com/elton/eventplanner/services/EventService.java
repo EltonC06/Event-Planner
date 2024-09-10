@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.elton.eventplanner.DTOs.EventDTO;
 import com.elton.eventplanner.entities.Event;
 import com.elton.eventplanner.entities.enums.EventStatus;
+import com.elton.eventplanner.entities.enums.UserRole;
 import com.elton.eventplanner.repositories.EventRepository;
 import com.elton.eventplanner.repositories.UserRepository;
 
@@ -32,20 +33,27 @@ public class EventService {
 	
 	public void saveEvent(EventDTO eventDTO) {		
 		Event event = convertToEntity(eventDTO);
-
-		repository.save(event);
+		if (event.getUser().getRole().equals(UserRole.USER)) {
+			throw new RuntimeException();
+		} else {
+			repository.save(event);
+		}
 	}
 	
 	public void updateEvent(Long id, EventDTO eventDTO) {
 		Event eventToUpdate = repository.findById(id).get();
 		Event event = convertToEntity(eventDTO);
-		eventToUpdate.setDate(event.getDate());
-		eventToUpdate.setDescription(event.getDescription());
-		eventToUpdate.setLocal(event.getLocal());
-		eventToUpdate.setName(event.getName());
-		eventToUpdate.setUser(event.getUser());
-		eventToUpdate.setEventStatus(event.getEventStatus());
-		repository.save(eventToUpdate);
+		if (event.getUser().getRole().equals(UserRole.USER)) {
+			throw new RuntimeException();
+		} else {
+			eventToUpdate.setDate(event.getDate());
+			eventToUpdate.setDescription(event.getDescription());
+			eventToUpdate.setLocal(event.getLocal());
+			eventToUpdate.setName(event.getName());
+			eventToUpdate.setUser(event.getUser());
+			eventToUpdate.setEventStatus(event.getEventStatus());
+			repository.save(eventToUpdate);
+		}
 	}
 	
 	public void deleteEvent(Long id) {
