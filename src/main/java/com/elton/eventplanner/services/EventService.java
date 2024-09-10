@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.elton.eventplanner.DTOs.EventDTO;
 import com.elton.eventplanner.entities.Event;
+import com.elton.eventplanner.entities.enums.EventStatus;
 import com.elton.eventplanner.repositories.EventRepository;
 import com.elton.eventplanner.repositories.UserRepository;
 
@@ -43,6 +44,7 @@ public class EventService {
 		eventToUpdate.setLocal(event.getLocal());
 		eventToUpdate.setName(event.getName());
 		eventToUpdate.setUser(event.getUser());
+		eventToUpdate.setEventStatus(event.getEventStatus());
 		repository.save(eventToUpdate);
 	}
 	
@@ -57,7 +59,7 @@ public class EventService {
 		eventConverted.setLocal(eventDTO.getLocal());
 		eventConverted.setName(eventDTO.getName());
 		eventConverted.setUser(userRepository.findById(eventDTO.getUserId()).get());
-		
+		eventConverted.setEventStatus(EventStatus.valueOf(eventDTO.getEventStatus()));
 		return eventConverted;
 	}
 	
@@ -68,6 +70,7 @@ public class EventService {
 		eventDTO.setLocal(event.getLocal());
 		eventDTO.setDate(event.getDate());
 		eventDTO.setUserId(event.getUser().getId());
+		eventDTO.setEventStatus(event.getEventStatus().toString());
 		return eventDTO;
 	}
 }

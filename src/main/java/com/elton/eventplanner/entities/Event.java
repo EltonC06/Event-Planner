@@ -3,6 +3,9 @@ package com.elton.eventplanner.entities;
 import java.util.Date;
 import java.util.Objects;
 
+import com.elton.eventplanner.entities.enums.EventStatus;
+
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,6 +26,8 @@ public class Event {
 	private Date date;
 	private String local;
 	private String description;
+	@Nonnull
+	private EventStatus eventStatus;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id", referencedColumnName = "userId")
@@ -32,13 +37,14 @@ public class Event {
 		
 	}
 
-	public Event(Long id, String name, String local, Date date, String description, User user) {
+	public Event(Long id, String name, String local, Date date, String description, User user, EventStatus eventStatus) {
 		super();
 		this.eventId = id;
 		this.name = name;
 		this.date = date;
 		this.local = local;
 		this.description = description;
+		this.setEventStatus(eventStatus);
 		this.user = user;
 	}
 
@@ -80,6 +86,14 @@ public class Event {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	public EventStatus getEventStatus() {
+		return eventStatus;
+	}
+
+	public void setEventStatus(EventStatus eventStatus) {
+		this.eventStatus = eventStatus;
 	}
 
 	public User getUser() {

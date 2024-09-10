@@ -8,18 +8,20 @@ public class EventDTO {
 	private Date date;
 	private String local;
 	private String description;
+	private String eventStatus;
 	private Long userId;
 		
 	public EventDTO() {
 		
 	}
 
-	public EventDTO(String name, Date date, String local, String description, Long userId) {
+	public EventDTO(String name, Date date, String local, String description, Long userId, String eventStatus) {
 		super();
 		this.name = name;
 		this.date = date;
 		this.local = local;
 		this.description = description;
+		this.setEventStatus(eventStatus);
 		this.userId = userId;
 	}
 
@@ -50,7 +52,15 @@ public class EventDTO {
 	public String getDescription() {
 		return description;
 	}
+	
+	public String getEventStatus() {
+		return eventStatus;
+	}
 
+	public void setEventStatus(String eventStatus) {
+		this.eventStatus = eventStatus;
+	}
+	
 	public void setDescription(String description) {
 		this.description = description;
 	}
