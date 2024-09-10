@@ -1,10 +1,14 @@
 package com.elton.eventplanner.DTOs;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UserDTO {
 
 	private String userName;
 	private String password;
 	private String role;
+	private List<Long> eventIdList = new ArrayList<Long>();
 	
 	public UserDTO() {
 		
@@ -39,5 +43,13 @@ public class UserDTO {
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	public List<Long> getEventIdList() {
+		return eventIdList;
+	}
+
+	public void addEventId(Long id) {
+		eventIdList.add(id);
 	}
 }

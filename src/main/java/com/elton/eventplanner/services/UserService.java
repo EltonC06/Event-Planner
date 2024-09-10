@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.elton.eventplanner.DTOs.UserDTO;
+import com.elton.eventplanner.entities.Event;
 import com.elton.eventplanner.entities.User;
 import com.elton.eventplanner.entities.enums.UserRole;
 import com.elton.eventplanner.repositories.UserRepository;
@@ -68,7 +69,6 @@ public class UserService {
 		user.setUserName(userDTO.getUserName());
 		user.setPassword(userDTO.getPassword());
 		user.setRole(UserRole.valueOf(userDTO.getRole()));
-		
 		return user;
 	}
 	
@@ -77,6 +77,9 @@ public class UserService {
 		userDTO.setUserName(user.getUserName());
 		userDTO.setRole(user.getRole().toString());
 		userDTO.setPassword(user.getPassword());
+		for (Event event : user.getEventList()) {
+			userDTO.addEventId(event.getId());
+		}
 		return userDTO;
 	}
 }
