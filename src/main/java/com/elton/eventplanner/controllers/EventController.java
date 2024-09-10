@@ -29,10 +29,11 @@ public class EventController {
 	}
 	
 	@GetMapping(value = "/{id}")
-	public Event findById(@PathVariable(name = "id") Long id) {
-		return service.findEventById(id);
+	public EventDTO findById(@PathVariable(name = "id") Long id) {
+		EventDTO eventDTO = service.findEventById(id);
+		return eventDTO;
 	}
-	
+
 	@PostMapping
 	public void saveEvent(@RequestBody EventDTO eventDTO) {
 		service.saveEvent(eventDTO);

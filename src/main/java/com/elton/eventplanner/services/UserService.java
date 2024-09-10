@@ -17,12 +17,14 @@ public class UserService {
 	UserRepository repository;
 	
 	public List<User> findAllUsers() {
-		return repository.findAll();
+		List<User> userList = repository.findAll();
+		return userList;
 	}
 	
-	public User findUserById(Long id) {
+	public UserDTO findUserById(Long id) {
 		User user = repository.findById(id).get();
-		return user;
+		UserDTO userDTO = convertToDTO(user);
+		return userDTO;
 	}
 	
 	public void saveUser(UserDTO userDTO) {
@@ -68,5 +70,13 @@ public class UserService {
 		user.setRole(UserRole.valueOf(userDTO.getRole()));
 		
 		return user;
+	}
+	
+	private UserDTO convertToDTO(User user) {
+		UserDTO userDTO = new UserDTO();
+		userDTO.setUserName(user.getUserName());
+		userDTO.setRole(user.getRole().toString());
+		userDTO.setPassword(user.getPassword());
+		return userDTO;
 	}
 }

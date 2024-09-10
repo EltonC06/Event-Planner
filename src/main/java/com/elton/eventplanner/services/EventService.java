@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.elton.eventplanner.DTOs.EventDTO;
 import com.elton.eventplanner.entities.Event;
 import com.elton.eventplanner.repositories.EventRepository;
+import com.elton.eventplanner.repositories.UserRepository;
 
 @Service
 public class EventService {
@@ -16,14 +17,16 @@ public class EventService {
 	EventRepository repository;
 	
 	@Autowired
-	UserService userService;
+	UserRepository userRepository;
 	
 	public List<Event> findAllEvent() {
 		return repository.findAll();
 	}
 	
-	public Event findEventById(Long id) {
-		return repository.findById(id).get();
+	public EventDTO findEventById(Long id) {
+		Event event = repository.findById(id).get();
+		EventDTO eventDTO = convertToDTO(event);
+		return eventDTO;
 	}
 	
 	public void saveEvent(EventDTO eventDTO) {		
@@ -34,15 +37,12 @@ public class EventService {
 	
 	public void updateEvent(Long id, EventDTO eventDTO) {
 		Event eventToUpdate = repository.findById(id).get();
-		
 		Event event = convertToEntity(eventDTO);
-		
 		eventToUpdate.setDate(event.getDate());
 		eventToUpdate.setDescription(event.getDescription());
 		eventToUpdate.setLocal(event.getLocal());
 		eventToUpdate.setName(event.getName());
 		eventToUpdate.setUser(event.getUser());
-		
 		repository.save(eventToUpdate);
 	}
 	
@@ -56,8 +56,18 @@ public class EventService {
 		eventConverted.setDescription(eventDTO.getDescription());
 		eventConverted.setLocal(eventDTO.getLocal());
 		eventConverted.setName(eventDTO.getName());
-		eventConverted.setUser(userService.findUserById(eventDTO.getUserId()));
+		eventConverted.setUser(userRepository.findById(eventDTO.getUserId()).get());
 		
 		return eventConverted;
+	}
+	
+	private EventDTO convertToDTO(Event event) {
+		EventDTO eventDTO = new EventDTO();
+		eventDTO.setName(event.getName());
+		eventDTO.setDescription(event.getDescription());
+		eventDTO.setLocal(event.getLocal());
+		eventDTO.setDate(event.getDate());
+		eventDTO.setUserId(event.getUser().getId());
+		return eventDTO;
 	}
 }
