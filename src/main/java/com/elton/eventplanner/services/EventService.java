@@ -60,6 +60,12 @@ public class EventService {
 		repository.deleteById(id);
 	}
 	
+	public void cancelEvent(Long id) {
+		Event event = repository.findById(id).get();
+		event.setEventStatus(EventStatus.CANCELLED);
+		repository.save(event);
+	}
+	
 	private Event convertToEntity(EventDTO eventDTO) {
 		Event eventConverted = new Event();
 		eventConverted.setDate(eventDTO.getDate());

@@ -48,4 +48,9 @@ public class EventController {
 	public void deleteEvent(@PathVariable(name = "id") Long id) {
 		service.deleteEvent(id);
 	}
+	
+	@PutMapping("/cancel/{id}")
+	public void cancelEvent(@PathVariable Long id) {
+		service.cancelEvent(id);
+	}
 }
