@@ -53,4 +53,9 @@ public class EventController {
 	public void cancelEvent(@PathVariable Long id) {
 		service.cancelEvent(id);
 	}
+	
+	@PutMapping("/autostatusupdate/{id}")
+	public void autoStatusUpdate(@PathVariable Long id) {
+		service.autoStatusUpdate(id);
+	}
 }

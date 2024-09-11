@@ -1,5 +1,7 @@
 package com.elton.eventplanner.services;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,5 +88,20 @@ public class EventService {
 		eventDTO.setUserId(event.getUser().getId());
 		eventDTO.setEventStatus(event.getEventStatus().toString());
 		return eventDTO;
+	}
+
+	public void autoStatusUpdate(Long id) {
+		Event event = repository.findById(id).get();
+		Date calendar = Calendar.getInstance().getTime();
+		
+		if (event.getDate().before(calendar) && !event.getEventStatus().equals(EventStatus.CANCELLED)) {
+			event.setEventStatus(EventStatus.COMPLETED);
+			repository.save(event);
+		} else {
+			if (event.getDate().after(calendar) && !event.getEventStatus().equals(EventStatus.CANCELLED)) {
+				event.setEventStatus(EventStatus.PLANNED);
+				repository.save(event);
+			}
+		}
 	}
 }
