@@ -10,6 +10,8 @@ import com.elton.eventplanner.entities.Event;
 import com.elton.eventplanner.entities.User;
 import com.elton.eventplanner.entities.enums.UserRole;
 import com.elton.eventplanner.repositories.UserRepository;
+import com.elton.eventplanner.services.exceptions.EntityNotFoundException;
+import com.elton.eventplanner.services.exceptions.UserAlreadyExistsException;
 
 @Service
 public class UserService {
@@ -23,7 +25,7 @@ public class UserService {
 	}
 	
 	public UserDTO findUserById(Long id) {
-		User user = repository.findById(id).get();
+		User user = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
 		UserDTO userDTO = convertToDTO(user);
 		return userDTO;
 	}
@@ -33,7 +35,7 @@ public class UserService {
 		List<User> listOfUser = repository.findAll();
 		for (User obj : listOfUser) {
 			if (obj.getUserName().equals(user.getUserName())) {
-				throw new RuntimeException();
+				throw new UserAlreadyExistsException(user.getUserName());
 			}
 		}
 		repository.save(user);
@@ -41,13 +43,12 @@ public class UserService {
 	
 	public void updateUser(Long id, UserDTO userDTO) {
 		User user = convertToEntity(userDTO);
-		User userToUpdate = repository.findById(id).get();
+		User userToUpdate = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
 		if (!user.getUserName().equals(userToUpdate.getUserName())) {
 			List<User> listOfUsers = repository.findAll();
-			
 			for (User obj : listOfUsers) {
 				if (obj.getUserName().equals(user.getUserName())) {
-					throw new RuntimeException();
+					throw new UserAlreadyExistsException(user.getUserName());
 				}
 			}
 		}
@@ -59,7 +60,11 @@ public class UserService {
 	}
 	
 	public void deleteUser(Long id) {
-		repository.deleteById(id);
+		if (!repository.existsById(id)) {
+			throw new EntityNotFoundException(id);
+		} else {
+			repository.deleteById(id);
+		}
 	}
 	
 	private User convertToEntity(UserDTO userDTO) {

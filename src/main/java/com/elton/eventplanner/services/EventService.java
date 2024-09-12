@@ -13,6 +13,8 @@ import com.elton.eventplanner.entities.enums.EventStatus;
 import com.elton.eventplanner.entities.enums.UserRole;
 import com.elton.eventplanner.repositories.EventRepository;
 import com.elton.eventplanner.repositories.UserRepository;
+import com.elton.eventplanner.services.exceptions.EntityNotFoundException;
+import com.elton.eventplanner.services.exceptions.RoleNotAllowedException;
 
 @Service
 public class EventService {
@@ -28,23 +30,29 @@ public class EventService {
 	}
 	
 	public EventDTO findEventById(Long id) {
-		Event event = repository.findById(id).get();
+		Event event = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
 		EventDTO eventDTO = convertToDTO(event);
 		return eventDTO;
 	}
 	
 	public void saveEvent(EventDTO eventDTO) {		
 		Event event = convertToEntity(eventDTO);
+		if (!userRepository.existsById(event.getUser().getId())) {
+			throw new EntityNotFoundException(event.getUser().getId());
+		}
 		if (event.getUser().getRole().equals(UserRole.USER)) {
-			throw new RuntimeException();
+			throw new RoleNotAllowedException(event.getUser().getRole(), "create an event");
 		} else {
 			repository.save(event);
 		}
 	}
 	
 	public void updateEvent(Long id, EventDTO eventDTO) {
-		Event eventToUpdate = repository.findById(id).get();
+		Event eventToUpdate = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
 		Event event = convertToEntity(eventDTO);
+		if (userRepository.existsById(event.getUser().getId())) {
+			throw new EntityNotFoundException(event.getUser().getId());
+		}
 		if (event.getUser().getRole().equals(UserRole.USER)) {
 			throw new RuntimeException();
 		} else {
@@ -59,17 +67,39 @@ public class EventService {
 	}
 	
 	public void deleteEvent(Long id) {
-		repository.deleteById(id);
+		if (!repository.existsById(id)) {
+			throw new EntityNotFoundException(id);
+		} else {
+			repository.deleteById(id);
+		}
 	}
 	
 	public void cancelEvent(Long id) {
-		Event event = repository.findById(id).get();
+		Event event = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
 		event.setEventStatus(EventStatus.CANCELLED);
 		repository.save(event);
 	}
 	
+	public void autoStatusUpdate(Long id) {
+		Event event = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
+		Date calendar = Calendar.getInstance().getTime();
+		
+		if (event.getDate().before(calendar) && !event.getEventStatus().equals(EventStatus.CANCELLED)) {
+			event.setEventStatus(EventStatus.COMPLETED);
+			repository.save(event);
+		} else {
+			if (event.getDate().after(calendar) && !event.getEventStatus().equals(EventStatus.CANCELLED)) {
+				event.setEventStatus(EventStatus.PLANNED);
+				repository.save(event);
+			}
+		}
+	}
+	
 	private Event convertToEntity(EventDTO eventDTO) {
 		Event eventConverted = new Event();
+		if (!userRepository.existsById(eventDTO.getUserId())) {
+			throw new EntityNotFoundException(eventDTO.getUserId());
+		}
 		eventConverted.setDate(eventDTO.getDate());
 		eventConverted.setDescription(eventDTO.getDescription());
 		eventConverted.setLocal(eventDTO.getLocal());
@@ -88,20 +118,5 @@ public class EventService {
 		eventDTO.setUserId(event.getUser().getId());
 		eventDTO.setEventStatus(event.getEventStatus().toString());
 		return eventDTO;
-	}
-
-	public void autoStatusUpdate(Long id) {
-		Event event = repository.findById(id).get();
-		Date calendar = Calendar.getInstance().getTime();
-		
-		if (event.getDate().before(calendar) && !event.getEventStatus().equals(EventStatus.CANCELLED)) {
-			event.setEventStatus(EventStatus.COMPLETED);
-			repository.save(event);
-		} else {
-			if (event.getDate().after(calendar) && !event.getEventStatus().equals(EventStatus.CANCELLED)) {
-				event.setEventStatus(EventStatus.PLANNED);
-				repository.save(event);
-			}
-		}
 	}
 }

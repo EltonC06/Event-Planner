@@ -3,6 +3,7 @@ package com.elton.eventplanner.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,9 +30,9 @@ public class EventController {
 	}
 	
 	@GetMapping(value = "/{id}")
-	public EventDTO findById(@PathVariable(name = "id") Long id) {
+	public ResponseEntity<EventDTO> findById(@PathVariable(name = "id") Long id) {
 		EventDTO eventDTO = service.findEventById(id);
-		return eventDTO;
+		return ResponseEntity.ok().body(eventDTO);
 	}
 
 	@PostMapping
