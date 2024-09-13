@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import com.elton.eventplanner.services.exceptions.EntityNotFoundException;
 import com.elton.eventplanner.services.exceptions.RoleNotAllowedException;
 import com.elton.eventplanner.services.exceptions.UserAlreadyExistsException;
+import com.elton.eventplanner.services.exceptions.WrongDateFormatException;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -50,5 +51,14 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.status(HttpStatus.FORBIDDEN.value()).body(err);
 	}
 	
-
+	@ExceptionHandler(WrongDateFormatException.class)
+	public ResponseEntity<StandardError> wrongDateFormat(WrongDateFormatException e, HttpServletRequest request) {
+		StandardError err = new StandardError();
+		err.setTimestamp(Instant.now());
+		err.setStatus(HttpStatus.BAD_REQUEST.value());
+		err.setError("Invalid date format");
+		err.setMessage(e.getMessage());
+		err.setPath(request.getRequestURI());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(err);
+	}
 }

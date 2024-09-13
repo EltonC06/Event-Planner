@@ -17,6 +17,7 @@ import com.elton.eventplanner.repositories.EventRepository;
 import com.elton.eventplanner.repositories.UserRepository;
 import com.elton.eventplanner.services.exceptions.EntityNotFoundException;
 import com.elton.eventplanner.services.exceptions.RoleNotAllowedException;
+import com.elton.eventplanner.services.exceptions.WrongDateFormatException;
 
 @Service
 public class EventService {
@@ -26,8 +27,6 @@ public class EventService {
 	
 	@Autowired
 	UserRepository userRepository;
-	
-	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	
 	public List<Event> findAllEvent() {
 		return repository.findAll();
@@ -100,6 +99,7 @@ public class EventService {
 	}
 	
 	private Event convertToEntity(EventDTO eventDTO) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Event eventConverted = new Event();
 		if (!userRepository.existsById(eventDTO.getUserId())) {
 			throw new EntityNotFoundException(eventDTO.getUserId());
@@ -107,7 +107,7 @@ public class EventService {
 		try {
 			eventConverted.setDate(sdf.parse(eventDTO.getDate()));
 		} catch (ParseException e) {
-			e.printStackTrace();
+			throw new WrongDateFormatException();
 		}
 		eventConverted.setDescription(eventDTO.getDescription());
 		eventConverted.setLocal(eventDTO.getLocal());
@@ -118,6 +118,7 @@ public class EventService {
 	}
 	
 	private EventDTO convertToDTO(Event event) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		EventDTO eventDTO = new EventDTO();
 		eventDTO.setName(event.getName());
 		eventDTO.setDescription(event.getDescription());

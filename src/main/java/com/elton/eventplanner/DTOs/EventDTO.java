@@ -9,7 +9,6 @@ public class EventDTO {
 	@NotBlank(message = "Username can't be empty.")
 	@Size(min = 4, max = 200, message = "Event name need to have more than 4 and less than 200 characters")
 	private String name;
-	@Pattern(regexp = "([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})", message = "Respect the date format: 2006-06-14")
 	private String date;
 	@Size(min = 4, max = 200, message = "Event local need to have more than 4 and less than 200 characters")
 	private String local;

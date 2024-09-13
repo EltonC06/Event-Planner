@@ -14,7 +14,6 @@ public class UserDTO {
 	@Pattern(regexp = "^([a-zA-Z])[a-zA-Z_-]*[\\w_-]*[\\S]$|^([a-zA-Z])[0-9_-]*[\\S]$|^[a-zA-Z]*[\\S]$",
 	message = "Username must start with a letter and not contain spaces at the end.")
 	private String userName;
-	
 	@Pattern(regexp = "^(?=.*\\d).{4,8}$", message = "Password must be between 4 and 8 digits long and include at least one numeric digit.")
 	private String password;
 	private String role;
