@@ -9,12 +9,12 @@ import jakarta.validation.constraints.Size;
 
 public class UserDTO {
 
-	@NotBlank(message = "Username can't be empty.")
+	@NotBlank(message = "Username can't be empty")
 	@Size(min = 3, max = 18, message = "Username need to have more than 2 and less than 18 characters")
 	@Pattern(regexp = "^([a-zA-Z])[a-zA-Z_-]*[\\w_-]*[\\S]$|^([a-zA-Z])[0-9_-]*[\\S]$|^[a-zA-Z]*[\\S]$",
-	message = "Username must start with a letter and not contain spaces at the end.")
+	message = "Username must start with a letter and not contain spaces at the end")
 	private String userName;
-	@Pattern(regexp = "^(?=.*\\d).{4,8}$", message = "Password must be between 4 and 8 digits long and include at least one numeric digit.")
+	@Pattern(regexp = "^(?=.*\\d).{4,8}$", message = "Password must be between 4 and 8 digits long and include at least one numeric digit")
 	private String password;
 	private String role;
 	private List<Long> eventIdList = new ArrayList<Long>();
