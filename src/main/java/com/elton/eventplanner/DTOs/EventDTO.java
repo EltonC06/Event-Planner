@@ -1,12 +1,19 @@
 package com.elton.eventplanner.DTOs;
 
-import java.util.Date;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 public class EventDTO {
 	
+	@NotBlank(message = "Username can't be empty.")
+	@Size(min = 4, max = 200, message = "Event name need to have more than 4 and less than 200 characters")
 	private String name;
-	private Date date;
+	@Pattern(regexp = "([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})", message = "Respect the date format: 2006-06-14")
+	private String date;
+	@Size(min = 4, max = 200, message = "Event local need to have more than 4 and less than 200 characters")
 	private String local;
+	@Size(min = 10, max = 500, message = "Event description need to have more than 4 and less than 200 characters")
 	private String description;
 	private String eventStatus;
 	private Long userId;
@@ -15,7 +22,7 @@ public class EventDTO {
 		
 	}
 
-	public EventDTO(String name, Date date, String local, String description, Long userId, String eventStatus) {
+	public EventDTO(String name, String date, String local, String description, Long userId, String eventStatus) {
 		super();
 		this.name = name;
 		this.date = date;
@@ -33,11 +40,11 @@ public class EventDTO {
 		this.name = name;
 	}
 
-	public Date getDate() {
+	public String getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(String date) {
 		this.date = date;
 	}
 

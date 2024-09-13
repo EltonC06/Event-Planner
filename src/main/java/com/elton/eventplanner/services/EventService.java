@@ -1,5 +1,7 @@
 package com.elton.eventplanner.services;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -24,6 +26,8 @@ public class EventService {
 	
 	@Autowired
 	UserRepository userRepository;
+	
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	
 	public List<Event> findAllEvent() {
 		return repository.findAll();
@@ -100,7 +104,11 @@ public class EventService {
 		if (!userRepository.existsById(eventDTO.getUserId())) {
 			throw new EntityNotFoundException(eventDTO.getUserId());
 		}
-		eventConverted.setDate(eventDTO.getDate());
+		try {
+			eventConverted.setDate(sdf.parse(eventDTO.getDate()));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 		eventConverted.setDescription(eventDTO.getDescription());
 		eventConverted.setLocal(eventDTO.getLocal());
 		eventConverted.setName(eventDTO.getName());
@@ -114,7 +122,7 @@ public class EventService {
 		eventDTO.setName(event.getName());
 		eventDTO.setDescription(event.getDescription());
 		eventDTO.setLocal(event.getLocal());
-		eventDTO.setDate(event.getDate());
+		eventDTO.setDate(sdf.format(event.getDate()));
 		eventDTO.setUserId(event.getUser().getId());
 		eventDTO.setEventStatus(event.getEventStatus().toString());
 		return eventDTO;

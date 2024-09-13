@@ -17,6 +17,8 @@ import com.elton.eventplanner.DTOs.UserDTO;
 import com.elton.eventplanner.entities.User;
 import com.elton.eventplanner.services.UserService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping(value = "/users")
 public class UserController {
@@ -36,12 +38,12 @@ public class UserController {
 	}
 	
 	@PostMapping
-	public void createUser(@RequestBody UserDTO userDTO) {
+	public void createUser(@Valid @RequestBody UserDTO userDTO) {
 		service.saveUser(userDTO);
 	}
 	
 	@PutMapping(value = "/{id}")
-	public void updateUser(@PathVariable(name = "id") Long id, @RequestBody UserDTO userDTO) {
+	public void updateUser(@PathVariable(name = "id") Long id, @Valid @RequestBody UserDTO userDTO) {
 		service.updateUser(id, userDTO);
 	}
 	

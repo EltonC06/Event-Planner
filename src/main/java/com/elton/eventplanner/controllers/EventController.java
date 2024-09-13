@@ -17,6 +17,8 @@ import com.elton.eventplanner.DTOs.EventDTO;
 import com.elton.eventplanner.entities.Event;
 import com.elton.eventplanner.services.EventService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping(value = "/events")
 public class EventController {
@@ -36,12 +38,12 @@ public class EventController {
 	}
 
 	@PostMapping
-	public void saveEvent(@RequestBody EventDTO eventDTO) {
+	public void saveEvent(@Valid @RequestBody EventDTO eventDTO) {
 		service.saveEvent(eventDTO);
 	}
 	
 	@PutMapping(value = "/{id}")
-	public void updateEvent(@PathVariable(name = "id") Long id, @RequestBody EventDTO eventDTO) {
+	public void updateEvent(@PathVariable(name = "id") Long id, @Valid @RequestBody EventDTO eventDTO) {
 		service.updateEvent(id, eventDTO);
 	}
 	
