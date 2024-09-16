@@ -38,7 +38,7 @@ public class EventService {
 		return eventDTO;
 	}
 	
-	public void saveEvent(EventDTO eventDTO) {		
+	public Event saveEvent(EventDTO eventDTO) {		
 		Event event = convertToEntity(eventDTO);
 		if (!userRepository.existsById(event.getUser().getId())) {
 			throw new EntityNotFoundException(event.getUser().getId());
@@ -46,11 +46,11 @@ public class EventService {
 		if (event.getUser().getRole().equals(UserRole.USER)) {
 			throw new RoleNotAllowedException(event.getUser().getRole(), "create an event");
 		} else {
-			repository.save(event);
+			return repository.save(event);
 		}
 	}
 	
-	public void updateEvent(Long id, EventDTO eventDTO) {
+	public Event updateEvent(Long id, EventDTO eventDTO) {
 		Event eventToUpdate = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
 		Event event = convertToEntity(eventDTO);
 		if (!userRepository.existsById(event.getUser().getId())) {
@@ -65,7 +65,7 @@ public class EventService {
 			eventToUpdate.setName(event.getName());
 			eventToUpdate.setUser(event.getUser());
 			eventToUpdate.setEventStatus(event.getEventStatus());
-			repository.save(eventToUpdate);
+			return repository.save(eventToUpdate);
 		}
 	}
 	
@@ -77,25 +77,26 @@ public class EventService {
 		}
 	}
 	
-	public void cancelEvent(Long id) {
+	public Event cancelEvent(Long id) {
 		Event event = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
 		event.setEventStatus(EventStatus.CANCELLED);
-		repository.save(event);
+		return repository.save(event);
 	}
 	
-	public void autoStatusUpdate(Long id) {
+	public Event autoStatusUpdate(Long id) {
 		Event event = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
 		Date calendar = Calendar.getInstance().getTime();
 		
 		if (event.getDate().before(calendar) && !event.getEventStatus().equals(EventStatus.CANCELLED)) {
 			event.setEventStatus(EventStatus.COMPLETED);
-			repository.save(event);
+			return repository.save(event);
 		} else {
 			if (event.getDate().after(calendar) && !event.getEventStatus().equals(EventStatus.CANCELLED)) {
 				event.setEventStatus(EventStatus.PLANNED);
-				repository.save(event);
+				return repository.save(event);
 			}
 		}
+		return repository.save(event);
 	}
 	
 	private Event convertToEntity(EventDTO eventDTO) {

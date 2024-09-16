@@ -38,13 +38,15 @@ public class EventController {
 	}
 
 	@PostMapping
-	public void saveEvent(@Valid @RequestBody EventDTO eventDTO) {
-		service.saveEvent(eventDTO);
+	public ResponseEntity<Event> saveEvent(@Valid @RequestBody EventDTO eventDTO) {
+		Event event = service.saveEvent(eventDTO);
+		return ResponseEntity.ok().body(event);
 	}
 	
 	@PutMapping(value = "/{id}")
-	public void updateEvent(@PathVariable(name = "id") Long id, @Valid @RequestBody EventDTO eventDTO) {
-		service.updateEvent(id, eventDTO);
+	public ResponseEntity<Event> updateEvent(@PathVariable(name = "id") Long id, @Valid @RequestBody EventDTO eventDTO) {
+		Event event = service.updateEvent(id, eventDTO);
+		return ResponseEntity.ok().body(event);
 	}
 	
 	@DeleteMapping(value = "/{id}")
@@ -53,12 +55,14 @@ public class EventController {
 	}
 	
 	@PutMapping("/cancel/{id}")
-	public void cancelEvent(@PathVariable Long id) {
-		service.cancelEvent(id);
+	public ResponseEntity<Event> cancelEvent(@PathVariable Long id) {
+		Event event = service.cancelEvent(id);
+		return ResponseEntity.ok().body(event);
 	}
 	
 	@PutMapping("/autostatusupdate/{id}")
-	public void autoStatusUpdate(@PathVariable Long id) {
-		service.autoStatusUpdate(id);
+	public ResponseEntity<Event> autoStatusUpdate(@PathVariable Long id) {
+		Event event = service.autoStatusUpdate(id);
+		return ResponseEntity.ok().body(event);
 	}
 }
