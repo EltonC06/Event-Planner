@@ -53,11 +53,11 @@ public class EventService {
 	public void updateEvent(Long id, EventDTO eventDTO) {
 		Event eventToUpdate = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
 		Event event = convertToEntity(eventDTO);
-		if (userRepository.existsById(event.getUser().getId())) {
+		if (!userRepository.existsById(event.getUser().getId())) {
 			throw new EntityNotFoundException(event.getUser().getId());
 		}
 		if (event.getUser().getRole().equals(UserRole.USER)) {
-			throw new RuntimeException();
+			throw new RoleNotAllowedException(UserRole.USER, "update/manage an event");
 		} else {
 			eventToUpdate.setDate(event.getDate());
 			eventToUpdate.setDescription(event.getDescription());
