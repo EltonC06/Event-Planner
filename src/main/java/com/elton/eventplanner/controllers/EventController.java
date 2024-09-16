@@ -1,5 +1,6 @@
 package com.elton.eventplanner.controllers;
 
+import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.elton.eventplanner.DTOs.EventDTO;
 import com.elton.eventplanner.entities.Event;
@@ -24,45 +26,51 @@ import jakarta.validation.Valid;
 public class EventController {
 
 	@Autowired
-	EventService service;
+	EventService eventService;
 	
 	@GetMapping
-	public List<Event> findAll() {
-		return service.findAllEvent();
+	public ResponseEntity<List<Event>> findAll() {
+		List<Event> events = eventService.findAllEvent();
+		return ResponseEntity.ok().body(events);
 	}
 	
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<EventDTO> findById(@PathVariable(name = "id") Long id) {
-		EventDTO eventDTO = service.findEventById(id);
+		EventDTO eventDTO = eventService.findEventById(id);
 		return ResponseEntity.ok().body(eventDTO);
 	}
 
 	@PostMapping
 	public ResponseEntity<Event> saveEvent(@Valid @RequestBody EventDTO eventDTO) {
-		Event event = service.saveEvent(eventDTO);
-		return ResponseEntity.ok().body(event);
+		Event event = eventService.saveEvent(eventDTO);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+				.path("/{id}")
+				.buildAndExpand(event.getId())
+				.toUri();
+		return ResponseEntity.created(uri).body(event);
 	}
 	
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<Event> updateEvent(@PathVariable(name = "id") Long id, @Valid @RequestBody EventDTO eventDTO) {
-		Event event = service.updateEvent(id, eventDTO);
+		Event event = eventService.updateEvent(id, eventDTO);
 		return ResponseEntity.ok().body(event);
 	}
 	
 	@DeleteMapping(value = "/{id}")
-	public void deleteEvent(@PathVariable(name = "id") Long id) {
-		service.deleteEvent(id);
+	public ResponseEntity<Void> deleteEvent(@PathVariable(name = "id") Long id) {
+		eventService.deleteEvent(id);
+		return ResponseEntity.noContent().build();
 	}
 	
 	@PutMapping("/cancel/{id}")
 	public ResponseEntity<Event> cancelEvent(@PathVariable Long id) {
-		Event event = service.cancelEvent(id);
+		Event event = eventService.cancelEvent(id);
 		return ResponseEntity.ok().body(event);
 	}
 	
 	@PutMapping("/autostatusupdate/{id}")
 	public ResponseEntity<Event> autoStatusUpdate(@PathVariable Long id) {
-		Event event = service.autoStatusUpdate(id);
+		Event event = eventService.autoStatusUpdate(id);
 		return ResponseEntity.ok().body(event);
 	}
 }
