@@ -6,6 +6,7 @@ import java.util.Objects;
 import com.elton.eventplanner.entities.enums.UserRole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,7 +26,7 @@ public class User {
 	private UserRole role;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<Event> eventList;
 	
 	public User() {

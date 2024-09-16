@@ -6,7 +6,6 @@ import java.util.Objects;
 import com.elton.eventplanner.entities.enums.EventStatus;
 
 import jakarta.annotation.Nonnull;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,7 +28,7 @@ public class Event {
 	@Nonnull
 	private EventStatus eventStatus;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "user_id", referencedColumnName = "userId")
 	private User user;
 	
