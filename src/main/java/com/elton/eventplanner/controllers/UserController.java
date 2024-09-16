@@ -38,13 +38,15 @@ public class UserController {
 	}
 	
 	@PostMapping
-	public void createUser(@Valid @RequestBody UserDTO userDTO) {
-		service.saveUser(userDTO);
+	public ResponseEntity<User> createUser(@Valid @RequestBody UserDTO userDTO) {
+		User user = service.saveUser(userDTO);
+		return ResponseEntity.ok().body(user);
 	}
 	
 	@PutMapping(value = "/{id}")
-	public void updateUser(@PathVariable(name = "id") Long id, @Valid @RequestBody UserDTO userDTO) {
-		service.updateUser(id, userDTO);
+	public ResponseEntity<User> updateUser(@PathVariable(name = "id") Long id, @Valid @RequestBody UserDTO userDTO) {
+		User user = service.updateUser(id, userDTO);
+		return ResponseEntity.ok().body(user);
 	}
 	
 	@DeleteMapping(value = "/{id}")

@@ -30,7 +30,7 @@ public class UserService {
 		return userDTO;
 	}
 	
-	public void saveUser(UserDTO userDTO) {
+	public User saveUser(UserDTO userDTO) {
 		User user = convertToEntity(userDTO);
 		List<User> listOfUser = repository.findAll();
 		for (User obj : listOfUser) {
@@ -38,10 +38,10 @@ public class UserService {
 				throw new UserAlreadyExistsException(user.getUserName());
 			}
 		}
-		repository.save(user);
+		return repository.save(user);
 	}
 	
-	public void updateUser(Long id, UserDTO userDTO) {
+	public User updateUser(Long id, UserDTO userDTO) {
 		User user = convertToEntity(userDTO);
 		User userToUpdate = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
 		if (!user.getUserName().equals(userToUpdate.getUserName())) {
@@ -56,7 +56,7 @@ public class UserService {
 		userToUpdate.setPassword(user.getPassword());
 		userToUpdate.setRole(user.getRole());
 		
-		repository.save(userToUpdate);
+		return repository.save(userToUpdate);
 	}
 	
 	public void deleteUser(Long id) {
