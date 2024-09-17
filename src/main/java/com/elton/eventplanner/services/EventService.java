@@ -16,6 +16,7 @@ import com.elton.eventplanner.entities.enums.UserRole;
 import com.elton.eventplanner.repositories.EventRepository;
 import com.elton.eventplanner.repositories.UserRepository;
 import com.elton.eventplanner.services.exceptions.EntityNotFoundException;
+import com.elton.eventplanner.services.exceptions.InvalidEnumValueException;
 import com.elton.eventplanner.services.exceptions.RoleNotAllowedException;
 import com.elton.eventplanner.services.exceptions.WrongDateFormatException;
 
@@ -114,6 +115,12 @@ public class EventService {
 		eventConverted.setLocal(eventDTO.getLocal());
 		eventConverted.setName(eventDTO.getName());
 		eventConverted.setUser(userRepository.findById(eventDTO.getUserId()).get());
+		if (!eventDTO.getEventStatus().equals(EventStatus.PLANNED.toString()) &&
+				!eventDTO.getEventStatus().equals(EventStatus.CANCELLED.toString()) &&
+				!eventDTO.getEventStatus().equals(EventStatus.COMPLETED.toString())
+				) {
+			throw new InvalidEnumValueException("Please use only \"PLANNED\", \"CANCELLED\" or \"COMPLETED\"");
+		}
 		eventConverted.setEventStatus(EventStatus.valueOf(eventDTO.getEventStatus()));
 		return eventConverted;
 	}

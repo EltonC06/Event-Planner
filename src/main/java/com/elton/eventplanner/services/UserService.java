@@ -11,6 +11,7 @@ import com.elton.eventplanner.entities.User;
 import com.elton.eventplanner.entities.enums.UserRole;
 import com.elton.eventplanner.repositories.UserRepository;
 import com.elton.eventplanner.services.exceptions.EntityNotFoundException;
+import com.elton.eventplanner.services.exceptions.InvalidEnumValueException;
 import com.elton.eventplanner.services.exceptions.UserAlreadyExistsException;
 
 @Service
@@ -71,6 +72,12 @@ public class UserService {
 		User user = new User();
 		user.setUserName(userDTO.getUserName());
 		user.setPassword(userDTO.getPassword());
+		System.out.println(userDTO.getRole());
+		if (!userDTO.getRole().equals(UserRole.USER.toString()) &&
+				!userDTO.getRole().equals(UserRole.ADM.toString()) &&
+				!userDTO.getRole().equals(UserRole.OWNER.toString())) {
+			throw new InvalidEnumValueException("Please use only \"USER\", \"ADM\" or \"OWNER\"");
+		}
 		user.setRole(UserRole.valueOf(userDTO.getRole()));
 		return user;
 	}
