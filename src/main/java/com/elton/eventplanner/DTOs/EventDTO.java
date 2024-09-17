@@ -1,6 +1,7 @@
 package com.elton.eventplanner.DTOs;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
@@ -16,6 +17,7 @@ public class EventDTO {
 	@Size(min = 10, max = 500, message = "Event description need to have more than 4 and less than 200 characters")
 	private String description;
 	private String eventStatus;
+	@NotNull(message = "The 'userId' field can't be empty")
 	private Long userId;
 		
 	public EventDTO() {
