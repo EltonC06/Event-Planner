@@ -1,6 +1,7 @@
 package com.elton.eventplanner.DTOs;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public class EventDTO {
@@ -8,6 +9,7 @@ public class EventDTO {
 	@NotBlank(message = "Username can't be empty")
 	@Size(min = 4, max = 200, message = "Event name need to have more than 4 and less than 200 characters")
 	private String name;
+	@Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}", message = "Date must be in the format yyyy-MM-dd")
 	private String date;
 	@Size(min = 4, max = 200, message = "Event local need to have more than 4 and less than 200 characters")
 	private String local;
