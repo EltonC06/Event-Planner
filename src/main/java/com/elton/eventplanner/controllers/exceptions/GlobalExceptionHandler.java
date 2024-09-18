@@ -42,7 +42,6 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.status(HttpStatus.CONFLICT.value()).body(err);
 	}
 	
-	
 	@ExceptionHandler(RoleNotAllowedException.class)
 	public ResponseEntity<StandardError> roleNotAllowed(RoleNotAllowedException e, HttpServletRequest request) {
 		StandardError err = new StandardError();

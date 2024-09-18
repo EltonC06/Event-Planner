@@ -24,17 +24,17 @@ import com.elton.eventplanner.services.exceptions.WrongDateFormatException;
 public class EventService {
 	
 	@Autowired
-	EventRepository repository;
+	EventRepository eventRepository;
 	
 	@Autowired
 	UserRepository userRepository;
 	
 	public List<Event> findAllEvent() {
-		return repository.findAll();
+		return eventRepository.findAll();
 	}
 	
 	public EventDTO findEventById(Long id) {
-		Event event = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
+		Event event = eventRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
 		EventDTO eventDTO = convertToDTO(event);
 		return eventDTO;
 	}
@@ -47,12 +47,12 @@ public class EventService {
 		if (event.getUser().getRole().equals(UserRole.USER)) {
 			throw new RoleNotAllowedException(event.getUser().getRole(), "create an event");
 		} else {
-			return repository.save(event);
+			return eventRepository.save(event);
 		}
 	}
 	
 	public Event updateEvent(Long id, EventDTO eventDTO) {
-		Event eventToUpdate = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
+		Event eventToUpdate = eventRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
 		Event event = convertToEntity(eventDTO);
 		if (!userRepository.existsById(event.getUser().getId())) {
 			throw new EntityNotFoundException(event.getUser().getId());
@@ -66,38 +66,37 @@ public class EventService {
 			eventToUpdate.setName(event.getName());
 			eventToUpdate.setUser(event.getUser());
 			eventToUpdate.setEventStatus(event.getEventStatus());
-			return repository.save(eventToUpdate);
+			return eventRepository.save(eventToUpdate);
 		}
 	}
 	
 	public void deleteEvent(Long id) {
-		if (!repository.existsById(id)) {
+		if (!eventRepository.existsById(id)) {
 			throw new EntityNotFoundException(id);
 		} else {
-			repository.deleteById(id);
+			eventRepository.deleteById(id);
 		}
 	}
 	
 	public Event cancelEvent(Long id) {
-		Event event = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
+		Event event = eventRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
 		event.setEventStatus(EventStatus.CANCELLED);
-		return repository.save(event);
+		return eventRepository.save(event);
 	}
 	
 	public Event autoStatusUpdate(Long id) {
-		Event event = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
+		Event event = eventRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
 		Date calendar = Calendar.getInstance().getTime();
-		
 		if (event.getDate().before(calendar) && !event.getEventStatus().equals(EventStatus.CANCELLED)) {
 			event.setEventStatus(EventStatus.COMPLETED);
-			return repository.save(event);
+			return eventRepository.save(event);
 		} else {
 			if (event.getDate().after(calendar) && !event.getEventStatus().equals(EventStatus.CANCELLED)) {
 				event.setEventStatus(EventStatus.PLANNED);
-				return repository.save(event);
+				return eventRepository.save(event);
 			}
 		}
-		return repository.save(event);
+		return eventRepository.save(event);
 	}
 	
 	private Event convertToEntity(EventDTO eventDTO) {

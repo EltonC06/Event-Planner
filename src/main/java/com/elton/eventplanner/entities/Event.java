@@ -5,7 +5,6 @@ import java.util.Objects;
 
 import com.elton.eventplanner.entities.enums.EventStatus;
 
-import jakarta.annotation.Nonnull;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,7 +24,6 @@ public class Event {
 	private Date date;
 	private String local;
 	private String description;
-	@Nonnull
 	private EventStatus eventStatus;
 	
 	@ManyToOne
